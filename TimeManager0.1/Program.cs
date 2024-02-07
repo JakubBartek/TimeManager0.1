@@ -37,9 +37,9 @@ namespace timeManager
                         return;
 
                     default:
-                        Console.WriteLine("Write shortcut or name of the app you want to use\n\nStudyClock(s) | Calendar(c) !Work in progress! \n\nq to exit program");
                         break;
                 }
+                Console.WriteLine("Write shortcut or name of the app you want to use\n\nStudyClock(s) | Calendar(c) !Work in progress! \n\nq to exit program");
             }
         }
     }
