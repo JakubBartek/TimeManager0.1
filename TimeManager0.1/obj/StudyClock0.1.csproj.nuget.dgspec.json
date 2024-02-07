@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\jakub\\hi\\TimeManager0.1\\StudyClock0.1\\StudyClock0.1.csproj": {}
+    "C:\\Users\\jakub\\hi\\TimeManager0.1\\TimeManager0.1\\StudyClock0.1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\jakub\\hi\\TimeManager0.1\\StudyClock0.1\\StudyClock0.1.csproj": {
+    "C:\\Users\\jakub\\hi\\TimeManager0.1\\TimeManager0.1\\StudyClock0.1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jakub\\hi\\TimeManager0.1\\StudyClock0.1\\StudyClock0.1.csproj",
+        "projectUniqueName": "C:\\Users\\jakub\\hi\\TimeManager0.1\\TimeManager0.1\\StudyClock0.1.csproj",
         "projectName": "StudyClock0.1",
-        "projectPath": "C:\\Users\\jakub\\hi\\TimeManager0.1\\StudyClock0.1\\StudyClock0.1.csproj",
+        "projectPath": "C:\\Users\\jakub\\hi\\TimeManager0.1\\TimeManager0.1\\StudyClock0.1.csproj",
         "packagesPath": "C:\\Users\\jakub\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\jakub\\hi\\TimeManager0.1\\StudyClock0.1\\obj\\",
+        "outputPath": "C:\\Users\\jakub\\hi\\TimeManager0.1\\TimeManager0.1\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -1,8 +1,6 @@
-﻿using System;
-using System.IO;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
-namespace studyClock
+namespace timeManager
 {
     public enum ClockState
     {
@@ -10,17 +8,6 @@ namespace studyClock
         Stopped,
         End
     }
-    class Program
-    {
-        static void Main()
-        {
-            Console.WriteLine("Enter course code: ");
-            StudyClock clock = new(Console.ReadLine());
-            clock.Start();
-            Console.WriteLine("Exiting program!");
-        }
-    }
-
     class StudyClock
     {
         readonly string courseName = string.Empty;
@@ -28,8 +15,12 @@ namespace studyClock
         readonly string courseFile = string.Empty;
         string totalTime = string.Empty;
 
-        public StudyClock(string? courseName)
-        { 
+        public StudyClock()
+        {
+            Console.Clear();
+            Console.WriteLine("Enter course code: ");
+            string? courseName = Console.ReadLine();
+
             this.courseName = courseName ??= "default";
             courseFolder = @"C:\Users\jakub\hi\studyClock\" + courseName;
             courseFile = courseFolder + $"\\{courseName}.txt";
