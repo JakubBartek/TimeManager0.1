@@ -5,7 +5,5 @@ Currently working:
 
 Work in progress:
     Calendar
-
     Daily tasks/goals
-
     Progression tracker
