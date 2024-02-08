@@ -82,7 +82,7 @@ namespace timeManager
                 case "q":
                     stopwatch.Stop();
                     totalTime = AddSecondsToTime((int)stopwatch.Elapsed.TotalSeconds);
-                    SaveTotalTime();
+                    DirectoryHandler.SaveTotalTime(courseFile, totalTime);
                     return ClockState.End;
 
                 case "p":
@@ -92,20 +92,6 @@ namespace timeManager
                 default:
                     stopwatch.Start();
                     return ClockState.Running;
-            }
-        }
-
-        void SaveTotalTime()
-        {
-            try
-            {
-                StreamWriter sw = new(courseFile);
-                sw.WriteLine(totalTime);
-                sw.Close();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error writing in file: {ex.Message}");
             }
         }
 
@@ -130,18 +116,8 @@ namespace timeManager
 
         void GetTotalTime()
         {
-            string? totalTime = "";
-            try
-            {
-                StreamReader sr = new(courseFile);
-                totalTime = sr.ReadLine();
-                sr.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Exception: " + e.Message);
-            }
-            this.totalTime = totalTime ?? ""; // Use null-conditional operator to assign an empty string if totalTime is null
+            string? totalTime = DirectoryHandler.ReadLineFromFile(courseFile);
+            this.totalTime = totalTime ?? "";
         }
 
         static string GetAnswer(string message)

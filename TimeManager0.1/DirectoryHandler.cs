@@ -28,5 +28,35 @@ namespace timeManager
             sw.WriteLine(text);
             sw.Close();
         }
+
+        public static void SaveTotalTime(string fileName, string text)
+        {
+            try
+            {
+                StreamWriter sw = new(fileName);
+                sw.WriteLine(text);
+                sw.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error writing in file: {ex.Message}");
+            }
+        }
+
+        public static string? ReadLineFromFile(string fileName)
+        {
+            try
+            {
+                StreamReader sr = new(fileName);
+                string? totalTime = sr.ReadLine();
+                sr.Close();
+                return totalTime;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            return "";
+        }
     }
 }
