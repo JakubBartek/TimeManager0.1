@@ -1,1 +1,4 @@
 - fix: total time counter resets after counting to 24 hours 
+- implement: Calendar
+	     Daily tasks/goals
+	     Progression tracker
