@@ -37,7 +37,7 @@ namespace timeManager
                 Console.WriteLine("Making new course directory...");
 
                 DirectoryHandler.MakeNewDirectory(courseFolder);
-                DirectoryHandler.MakeFileInDirectory(courseFile, "00:00:00");
+                DirectoryHandler.MakeFileInDirectory(courseFile, "00:00:00:00");
             }
             GetTotalTime();
             RunClock();
@@ -117,14 +117,14 @@ namespace timeManager
                 // Add seconds to the existing time
                 TimeSpan updatedTime = currentTime.Add(TimeSpan.FromSeconds(secondsToAdd));
 
-                // Format the updated time as hh:mm:ss
-                string formattedTime = $"{updatedTime.Hours:D2}:{updatedTime.Minutes:D2}:{updatedTime.Seconds:D2}";
+                // Format the updated time as dd:hh:mm:ss
+                string formattedTime = $"{updatedTime.Days:D2}:{updatedTime.Hours:D2}:{updatedTime.Minutes:D2}:{updatedTime.Seconds:D2}";
 
                 return formattedTime;
             }
             else
             {
-                throw new ArgumentException("Invalid time format. Expected format: hh:mm:ss");
+                throw new ArgumentException("Invalid time format. Expected format: dd:hh:mm:ss");
             }
         }
 
