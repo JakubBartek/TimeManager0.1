@@ -15,15 +15,15 @@ namespace timeManager
         readonly string courseFile = string.Empty;
         string totalTime = string.Empty;
 
-        public StudyClock()
+        public StudyClock(string courseFolder = "default")
         {
             Console.Clear();
             Console.WriteLine("Enter course code: ");
             string? courseName = Console.ReadLine();
 
             this.courseName = courseName ??= "default";
-            courseFolder = @"C:\Users\jakub\hi\studyClock\" + courseName;
-            courseFile = courseFolder + $"\\{courseName}.txt";
+            if (courseFolder.Equals("default")) this.courseFolder = Directory.GetCurrentDirectory() + courseName; // if no directory is selected use the current one
+            courseFile = this.courseFolder + $"\\{courseName}.txt";
         }
 
         public void Start()
@@ -35,7 +35,9 @@ namespace timeManager
                     return;
                 }
                 Console.WriteLine("Making new course directory...");
-                MakeNewDirectory();
+
+                DirectoryHandler.MakeNewDirectory(courseFolder);
+                DirectoryHandler.MakeFileInDirectory(courseFile, "00:00:00");
             }
             GetTotalTime();
             RunClock();
@@ -123,23 +125,6 @@ namespace timeManager
             else
             {
                 throw new ArgumentException("Invalid time format. Expected format: hh:mm:ss");
-            }
-        }
-
-        void MakeNewDirectory()
-        {
-            try
-            {
-                Directory.CreateDirectory(courseFolder);
-                using (File.Create(courseFile)) { }
-                StreamWriter sw = new(courseFile);
-                sw.WriteLine("00:00:00");
-                sw.Close();
-                Console.WriteLine("Course imported successfully.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error creating the folder: {ex.Message}");
             }
         }
 
