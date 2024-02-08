@@ -2,3 +2,4 @@
 - implement: Calendar
 	     Daily tasks/goals
 	     Progression tracker
+- make folder to keep data such as directory path,...
