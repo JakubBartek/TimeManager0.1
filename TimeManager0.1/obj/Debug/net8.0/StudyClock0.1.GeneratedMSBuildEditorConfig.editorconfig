@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = StudyClock0._1
-build_property.ProjectDir = C:\Users\jakub\hi\TimeManager0.1\TimeManager0.1\
+build_property.ProjectDir = /home/jakubbartek/codingMaster/TimeManager0.1/TimeManager0.1/
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
