@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("StudyClock0.1")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1ec148369e7340d25ee81f138f383299bf91567b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7c2898c0367616c64230aac115d5e59a15000ffb")]
 [assembly: System.Reflection.AssemblyProductAttribute("StudyClock0.1")]
 [assembly: System.Reflection.AssemblyTitleAttribute("StudyClock0.1")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
