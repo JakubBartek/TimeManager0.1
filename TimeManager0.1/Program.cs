@@ -33,7 +33,7 @@ namespace timeManager
                         break;
 
                     case "q":
-                        Console.WriteLine("Exiting program");
+                        Console.WriteLine("Exiting program (Terminated by user)");
                         return;
 
                     default:
