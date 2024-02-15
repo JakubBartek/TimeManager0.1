@@ -4,13 +4,15 @@ namespace timeManager
     {
         static void Main()
         {
+            SettingsPage settingsPage = new();
+
             Console.Clear();
             Console.WriteLine("Welcome to TimeManager0.1 \n\nChoose app -> StudyClock(s) | Calendar(c) !Work in progress! \n\nq to exit program");
 
             while (true)
             {   
                 string? chosenApp = Console.ReadLine();
-                chosenApp = chosenApp ??= "default";
+                chosenApp ??= "default";
                 chosenApp = chosenApp.ToLower();
                 if (chosenApp.ToLower().Equals("s")) chosenApp = "studyclock";
                 if (chosenApp.ToLower().Equals("c")) chosenApp = "calendar";
@@ -35,6 +37,10 @@ namespace timeManager
                     case "q":
                         Console.WriteLine("Exiting program (Terminated by user)");
                         return;
+
+                    case "settings":
+                        settingsPage.EnterSettingsPage();
+                        break;
 
                     default:
                         break;
