@@ -11,9 +11,7 @@
 
             while (true)
             {   
-                string? chosenApp = Console.ReadLine();
-                chosenApp ??= "default";
-                chosenApp = chosenApp.ToLower();
+                string chosenApp = WaitForUserKey().ToLower();
                 if (chosenApp.ToLower().Equals("s")) chosenApp = "studyclock";
                 if (chosenApp.ToLower().Equals("c")) chosenApp = "calendar";
 
@@ -48,5 +46,17 @@
                 Console.WriteLine("Write shortcut or name of the app you want to use\n\nStudyClock(s) | Calendar(c) !Work in progress! | Settings\n\nq to exit program");
             }
         }
+
+        public static string WaitForUserKey()
+        {
+            while (true)
+            {
+                if (Console.KeyAvailable)
+                {
+                    return Console.ReadKey().Key.ToString();
+                }
+            }
+        }
+
     }
 }
