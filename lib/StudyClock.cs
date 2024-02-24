@@ -32,6 +32,7 @@ namespace timeManager
 
             this.courseName = courseName;
             if (courseFolder.Equals("default")) this.courseFolder = "TimeManagerPersonalData/" + courseName; // if no directory is selected use the current one
+          
             courseFile = this.courseFolder + $"/{courseName}.txt";
         }
 
