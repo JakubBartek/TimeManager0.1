@@ -1,16 +1,20 @@
-namespace timeManager
+﻿namespace timeManager
 {
-    class SettingsPage {
-        public string DataDirectory {get; set;}
+    class SettingsPage
+    {
+        public string DataDirectory { get; set; }
 
-        public SettingsPage() {
+        public SettingsPage()
+        {
             this.DataDirectory = Directory.GetCurrentDirectory();
         }
 
-        public void EnterSettingsPage() {
+        public void EnterSettingsPage()
+        {
             string? userInput;
 
-            while (true) {
+            while (true)
+            {
                 Console.Clear();
                 Console.WriteLine("------ Settings Page ------\n\n");
                 Console.WriteLine("p --> select path");
@@ -21,13 +25,17 @@ namespace timeManager
                 userInput ??= "default";
 
                 Console.Clear();
-                switch (userInput.ToLower()) {
+                switch (userInput.ToLower())
+                {
                     case "p":
                         Console.WriteLine("Enter path to directory to store app data");
                         userInput = Console.ReadLine();
-                        if (Directory.Exists(userInput)) {
+                        if (Directory.Exists(userInput))
+                        {
                             this.DataDirectory = userInput;
-                        } else {
+                        }
+                        else
+                        {
                             Console.WriteLine("\nGiven path is invalid (going back in 3s)");
                             Thread.Sleep(3000);
                         }
@@ -36,7 +44,7 @@ namespace timeManager
                     case "q":
                         Console.WriteLine("Add logic here");
                         continue;
-                    
+
                     case "b":
                         Console.WriteLine("Exiting settings page");
                         return;
