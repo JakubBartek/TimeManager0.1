@@ -10,7 +10,7 @@
             Console.WriteLine("Welcome to TimeManager0.1 \n\nChoose app -> StudyClock(s) | Calendar(c) !Work in progress! | Settings \n\nq to exit program");
 
             while (true)
-            {
+            {   
                 string? chosenApp = Console.ReadLine();
                 chosenApp ??= "default";
                 chosenApp = chosenApp.ToLower();
