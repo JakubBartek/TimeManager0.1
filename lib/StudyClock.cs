@@ -22,7 +22,7 @@ namespace timeManager
             string? courseName = Console.ReadLine();
 
             this.courseName = courseName ??= "default";
-            if (courseFolder.Equals("default")) this.courseFolder = "../../TimeManagerPersonalData/" + courseName; // if no directory is selected use the current one
+            if (courseFolder.Equals("default")) this.courseFolder = "../TimeManagerPersonalData/" + courseName; // if no directory is selected use the current one
             courseFile = this.courseFolder + $"/{courseName}.txt";
         }
 
