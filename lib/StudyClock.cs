@@ -17,11 +17,20 @@ namespace timeManager
 
         public StudyClock(string courseFolder = "default")
         {
-            Console.Clear();
-            Console.WriteLine("Enter course code: ");
-            string? courseName = Console.ReadLine();
+            // Idea: Make a selector which could be controlled with arrow keys
+            string? courseName;
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Enter course code: ");
+                courseName = Console.ReadLine();
 
-            this.courseName = courseName ??= "default";
+                if (courseName != null && courseName.Length > 0) break;
+                Console.WriteLine("Course name cannot be empty");
+                Thread.Sleep(500);
+            }
+
+            this.courseName = courseName;
             if (courseFolder.Equals("default")) this.courseFolder = "TimeManagerPersonalData/" + courseName; // if no directory is selected use the current one
             courseFile = this.courseFolder + $"/{courseName}.txt";
         }
@@ -48,36 +57,54 @@ namespace timeManager
             Stopwatch stopwatch = new();
             stopwatch.Start();
             ClockState clockState = ClockState.Running;
-            string ui;
+
+            Stopwatch consoleUpdateTimer = new();
+            consoleUpdateTimer.Start();
 
             while (true)
             {
-                Console.Clear();
-                ui = $"Total study time on course {courseName} is {totalTime}\n" +
-                      "q to exit, p to pause stopwatch, r to resume, any key to update time \n\n\n\n\n" +
-                      $"Current session: {stopwatch.Elapsed.ToString().Substring(0, 8)}\n";
+                if (consoleUpdateTimer.ElapsedMilliseconds > 100)
+                {
+                    consoleUpdateTimer.Restart();
+                    UpdateConsole(clockState, stopwatch);
+                }
 
-                if (clockState == ClockState.Stopped) ui += "Clock is stopped!\n";
-                if (clockState == ClockState.Running) ui += "Clock is running!\n";
+                if (Console.KeyAvailable)
+                {
+                    // True to not display the pressed key
+                    clockState = HandleInput(Console.ReadKey(true).Key.ToString(), stopwatch);
+                }
 
-                ui += @"
+                if (clockState == ClockState.End) return;
+            }
+        }
+
+        void UpdateConsole(ClockState clockState, Stopwatch stopwatch)
+        {
+            string ui;
+
+            Console.Clear();
+            ui = $"Total study time on course {courseName} is {totalTime}\n" +
+                  "q to exit, p to pause stopwatch, r to resume, any key to update time \n\n\n\n\n" +
+                  $"Current session: {stopwatch.Elapsed.ToString().Substring(0, 8)}\n";
+
+            if (clockState == ClockState.Stopped) ui += "Clock is stopped!\n";
+            if (clockState == ClockState.Running) ui += "Clock is running!\n";
+
+            ui += @"
                                     ░██████╗████████╗░█████╗░██╗░░░██╗  ██╗░░██╗░█████╗░██████╗░██████╗░
                                     ██╔════╝╚══██╔══╝██╔══██╗╚██╗░██╔╝  ██║░░██║██╔══██╗██╔══██╗██╔══██╗
                                     ╚█████╗░░░░██║░░░███████║░╚████╔╝░  ███████║███████║██████╔╝██║░░██║
                                     ░╚═══██╗░░░██║░░░██╔══██║░░╚██╔╝░░  ██╔══██║██╔══██║██╔══██╗██║░░██║
                                     ██████╔╝░░░██║░░░██║░░██║░░░██║░░░  ██║░░██║██║░░██║██║░░██║██████╔╝
                                     ╚═════╝░░░░╚═╝░░░╚═╝░░╚═╝░░░╚═╝░░░  ╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝╚═════╝░";
-
-                Console.WriteLine(ui);
-                clockState = HandleInput(Console.ReadLine(), stopwatch);
-
-                if (clockState == ClockState.End) return;
-            }
+            
+            Console.WriteLine(ui);
         }
 
-        ClockState HandleInput(string? userInput, Stopwatch stopwatch)
+        ClockState HandleInput(string userInput, Stopwatch stopwatch)
         {
-            switch (userInput)
+            switch (userInput.ToLower())
             {
                 case "q":
                     stopwatch.Stop();
