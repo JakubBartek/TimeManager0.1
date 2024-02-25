@@ -14,6 +14,9 @@ namespace timeManager
         readonly string courseFolder = string.Empty;
         readonly string courseFile = string.Empty;
         string totalTime = string.Empty;
+        // TODO: Save totalTime as ulong in seconds instead of string
+        // // Nobody have lived for 584942417355 years so far, so ulong is okay
+        // ulong totalSeconds = 0;
 
         public StudyClock(string courseFolder = "default")
         {
@@ -109,7 +112,7 @@ namespace timeManager
             {
                 case "q":
                     stopwatch.Stop();
-                    totalTime = AddSecondsToTime((int)stopwatch.Elapsed.TotalSeconds);
+                    totalTime = AddSecondsToTime(stopwatch.ElapsedMilliseconds / 1000);
                     DirectoryHandler.SaveTotalTime(courseFile, totalTime);
                     return ClockState.End;
 
@@ -123,7 +126,7 @@ namespace timeManager
             }
         }
 
-        string AddSecondsToTime(int secondsToAdd)
+        string AddSecondsToTime(long secondsToAdd)
         {
             // Parse the existing time string to a TimeSpan
             if (TimeSpan.TryParse(totalTime, out TimeSpan currentTime))
