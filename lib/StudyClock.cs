@@ -18,8 +18,19 @@ namespace timeManager
         // // Nobody have lived for 584942417355 years so far, so ulong is okay
         // ulong totalSeconds = 0;
 
+        readonly string stayHardLogo = @"
+        ░██████╗████████╗░█████╗░██╗░░░██╗  ██╗░░██╗░█████╗░██████╗░██████╗░
+        ██╔════╝╚══██╔══╝██╔══██╗╚██╗░██╔╝  ██║░░██║██╔══██╗██╔══██╗██╔══██╗
+        ╚█████╗░░░░██║░░░███████║░╚████╔╝░  ███████║███████║██████╔╝██║░░██║
+        ░╚═══██╗░░░██║░░░██╔══██║░░╚██╔╝░░  ██╔══██║██╔══██║██╔══██╗██║░░██║
+        ██████╔╝░░░██║░░░██║░░██║░░░██║░░░  ██║░░██║██║░░██║██║░░██║██████╔╝
+        ╚═════╝░░░░╚═╝░░░╚═╝░░╚═╝░░░╚═╝░░░  ╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝╚═════╝░";
+
+        TerminalAnimationSlider slider;
         public StudyClock(string courseFolder = "default")
         {
+            slider = new(stayHardLogo, 49);
+
             // Idea: Make a selector which could be controlled with arrow keys
             string? courseName;
             while (true)
@@ -35,7 +46,7 @@ namespace timeManager
 
             this.courseName = courseName;
             if (courseFolder.Equals("default")) this.courseFolder = "TimeManagerPersonalData/" + courseName; // if no directory is selected use the current one
-          
+
             courseFile = this.courseFolder + $"/{courseName}.txt";
         }
 
@@ -67,7 +78,7 @@ namespace timeManager
 
             while (true)
             {
-                if (consoleUpdateTimer.ElapsedMilliseconds > 100)
+                if (consoleUpdateTimer.ElapsedMilliseconds > 50)
                 {
                     consoleUpdateTimer.Restart();
                     UpdateConsole(clockState, stopwatch);
@@ -95,16 +106,8 @@ namespace timeManager
             if (clockState == ClockState.Stopped) ui += "Clock is stopped!\n";
             if (clockState == ClockState.Running) ui += "Clock is running!\n";
 
-            // Idea: give user option to push this to the right (adjust in settings)
-            ui += @"
-░██████╗████████╗░█████╗░██╗░░░██╗  ██╗░░██╗░█████╗░██████╗░██████╗░
-██╔════╝╚══██╔══╝██╔══██╗╚██╗░██╔╝  ██║░░██║██╔══██╗██╔══██╗██╔══██╗
-╚█████╗░░░░██║░░░███████║░╚████╔╝░  ███████║███████║██████╔╝██║░░██║
-░╚═══██╗░░░██║░░░██╔══██║░░╚██╔╝░░  ██╔══██║██╔══██║██╔══██╗██║░░██║
-██████╔╝░░░██║░░░██║░░██║░░░██║░░░  ██║░░██║██║░░██║██║░░██║██████╔╝
-╚═════╝░░░░╚═╝░░░╚═╝░░╚═╝░░░╚═╝░░░  ╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝╚═════╝░";
-            
             Console.WriteLine(ui);
+            slider.Print();
         }
 
         ClockState HandleInput(string userInput, Stopwatch stopwatch)

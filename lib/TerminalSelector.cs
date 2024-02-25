@@ -1,4 +1,4 @@
-namespace timeManager
+﻿namespace timeManager
 {
     class TerminalSelector
     {
