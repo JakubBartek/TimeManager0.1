@@ -6,17 +6,26 @@
         {
             SettingsPage settingsPage = new();
 
-            Console.Clear();
-            Console.WriteLine("Welcome to TimeManager0.1 \n\nChoose app -> StudyClock(s) | Calendar(c) !Work in progress! | Settings \n\nq to exit program");
+            string[] options = new string[] {
+                "StudyClock",
+                "Calendar",
+                "Settings",
+                "Exit",
+            };
+
+            string errorMsg = "";
 
             while (true)
-            {   
-                string chosenApp = WaitForUserKey().ToLower();
-                if (chosenApp.ToLower().Equals("s")) chosenApp = "studyclock";
-                if (chosenApp.ToLower().Equals("c")) chosenApp = "calendar";
-
+            {
                 Console.Clear();
-                switch (chosenApp)
+                string chosenOption = 
+                    options[TerminalSelector.Select(
+                        options,
+                        "Welcome to TimeManager0.1\n",
+                        "\n" + errorMsg
+                    )];
+
+                switch (chosenOption.ToLower())
                 {
                     case "studyclock":
                         Console.WriteLine("Running StudyClock!");
@@ -29,10 +38,10 @@
                         break;
 
                     case "calendar":
-                        Console.WriteLine("Calendar app is not finished yet");
+                        errorMsg = "Calendar app is not finished yet";
                         break;
 
-                    case "q":
+                    case "exit":
                         Console.WriteLine("Exiting program (Terminated by user)");
                         return;
 
@@ -43,20 +52,7 @@
                     default:
                         break;
                 }
-                Console.WriteLine("Write shortcut or name of the app you want to use\n\nStudyClock(s) | Calendar(c) !Work in progress! | Settings\n\nq to exit program");
             }
         }
-
-        public static string WaitForUserKey()
-        {
-            while (true)
-            {
-                if (Console.KeyAvailable)
-                {
-                    return Console.ReadKey().Key.ToString();
-                }
-            }
-        }
-
     }
 }
