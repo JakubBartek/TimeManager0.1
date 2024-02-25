@@ -18,7 +18,8 @@
             while (true)
             {
                 Console.Clear();
-                string chosenOption = 
+
+                string chosenOption =
                     options[TerminalSelector.Select(
                         options,
                         "Welcome to TimeManager0.1\n",
