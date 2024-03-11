@@ -50,13 +50,7 @@
         // it doesn't require the user to press enter
         public static ConsoleKeyInfo WaitForUserKey()
         {
-            while (true)
-            {
-                if (Console.KeyAvailable)
-                {
-                    return Console.ReadKey(true);
-                }
-            }
+            return Console.ReadKey(true);
         }
     }
 }
