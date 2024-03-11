@@ -5,6 +5,8 @@
         static void Main()
         {
             SettingsPage settingsPage = new();
+            // Animated mode is false by default
+            bool animatedMode = false;
 
             string[] options = new string[] {
                 "StudyClock",
@@ -32,7 +34,7 @@
                         Console.WriteLine("Running StudyClock!");
 
                         StudyClock clock = new();
-                        clock.Start();
+                        clock.Start(animatedMode: animatedMode);
 
                         Console.WriteLine("Exiting StudyClock!");
                         Console.Clear();
@@ -47,7 +49,7 @@
                         return;
 
                     case "settings":
-                        settingsPage.EnterSettingsPage();
+                        settingsPage.EnterSettingsPage(ref animatedMode);
                         break;
 
                     default:
