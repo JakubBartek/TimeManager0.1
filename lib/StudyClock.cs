@@ -51,7 +51,7 @@ namespace timeManager
             courseFile = this.courseFolder + $"/{courseName}.txt";
         }
 
-        public void Start()
+        public void Start(bool animatedMode = false)
         {
             if (!Directory.Exists(courseFolder))
             {
@@ -65,8 +65,11 @@ namespace timeManager
                 DirectoryHandler.MakeFileInDirectory(courseFile, "00:00:00:00");
             }
             GetTotalTime();
-            RunClock();
-            // RunClockAnimated();
+
+            if (animatedMode)
+                RunClockAnimated();
+            else
+                RunClock();
         }
 
         void RunClock()
