@@ -31,6 +31,7 @@ namespace timeManager
         {
             slider = new(stayHardLogo, 49);
 
+            // TODO
             // Idea: Make a selector which could be controlled with arrow keys
             string? courseName;
             while (true)
@@ -50,7 +51,7 @@ namespace timeManager
             courseFile = this.courseFolder + $"/{courseName}.txt";
         }
 
-        public void Start()
+        public void Start(bool animatedMode = false)
         {
             if (!Directory.Exists(courseFolder))
             {
@@ -64,10 +65,30 @@ namespace timeManager
                 DirectoryHandler.MakeFileInDirectory(courseFile, "00:00:00:00");
             }
             GetTotalTime();
-            RunClock();
+
+            if (animatedMode)
+                RunClockAnimated();
+            else
+                RunClock();
         }
 
         void RunClock()
+        {
+            Stopwatch stopwatch = new();
+            stopwatch.Start();
+            ClockState clockState = ClockState.Running;
+
+            while (true)
+            {
+                UpdateConsole(clockState, stopwatch);
+
+                clockState = HandleInput(Console.ReadKey(true).Key.ToString(), stopwatch);
+
+                if (clockState == ClockState.End) return;
+            }
+        }
+
+        void RunClockAnimated()
         {
             Stopwatch stopwatch = new();
             stopwatch.Start();
@@ -81,7 +102,7 @@ namespace timeManager
                 if (consoleUpdateTimer.ElapsedMilliseconds > 50)
                 {
                     consoleUpdateTimer.Restart();
-                    UpdateConsole(clockState, stopwatch);
+                    UpdateConsole(clockState, stopwatch, animatedMode: true);
                 }
 
                 if (Console.KeyAvailable)
@@ -94,7 +115,7 @@ namespace timeManager
             }
         }
 
-        void UpdateConsole(ClockState clockState, Stopwatch stopwatch)
+        void UpdateConsole(ClockState clockState, Stopwatch stopwatch, bool animatedMode = false)
         {
             string ui;
 
@@ -107,7 +128,11 @@ namespace timeManager
             if (clockState == ClockState.Running) ui += "Clock is running!\n";
 
             Console.WriteLine(ui);
-            slider.Print();
+
+            if (animatedMode)
+                slider.Print();
+            else
+                Console.WriteLine(stayHardLogo);
         }
 
         ClockState HandleInput(string userInput, Stopwatch stopwatch)

@@ -9,49 +9,100 @@
             this.DataDirectory = Directory.GetCurrentDirectory();
         }
 
-        public void EnterSettingsPage()
+        /// <summary>
+        /// Enter settings page
+        /// </summary>
+        /// <param name="animatedMode"> True if animated mode is enabled </param>
+        public void EnterSettingsPage(ref bool animatedMode)
         {
-            string? userInput;
+            const string selectPathStr = "Select Path";
+            const string addQuoteStr = "Add Quote";
+            const string switchAnimatedModeStr = "Switch Animated Mode";
+            const string backToMainPageStr = "Back to the Main Page";
+
+            string[] options = new string[] {
+                selectPathStr,
+                addQuoteStr,
+                switchAnimatedModeStr,
+                backToMainPageStr,
+            };
 
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("------ Settings Page ------\n\n");
-                Console.WriteLine("p --> select path");
-                Console.WriteLine("q --> add qote");
-                Console.WriteLine("b --> back to main page");
+                string chosenOption = options[TerminalSelector.Select(
+                    options,
+                    "Settings Page\n",
+                    ""
+                )];
 
-                userInput = Console.ReadLine();
-                userInput ??= "default";
-
-                Console.Clear();
-                switch (userInput.ToLower())
+                switch (chosenOption)
                 {
-                    case "p":
-                        Console.WriteLine("Enter path to directory to store app data");
-                        userInput = Console.ReadLine();
-                        if (Directory.Exists(userInput))
-                        {
-                            this.DataDirectory = userInput;
-                        }
-                        else
-                        {
-                            Console.WriteLine("\nGiven path is invalid (going back in 3s)");
-                            Thread.Sleep(3000);
-                        }
-                        continue;
+                    case selectPathStr:
+                        GetPathFromUserDialog();
+                        break;
 
-                    case "q":
-                        Console.WriteLine("Add logic here");
-                        continue;
+                    case addQuoteStr:
+                        TerminalSelector.Select(
+                            new string[] {
+                                "OK",
+                            },
+                            "Not implemented yet"
+                        );
+                        break;
+                    
+                    case switchAnimatedModeStr:
+                        animatedMode = !animatedMode;
+                        TerminalSelector.Select(
+                            new string[] {
+                                "OK",
+                            },
+                            "Animated mode is now " + (animatedMode ? "enabled" : "disabled")
+                        );
+                        break;
 
-                    case "b":
-                        Console.WriteLine("Exiting settings page");
+                    case backToMainPageStr:
                         return;
+
                     default:
-                        continue;
+                        throw new Exception("Invalid option");
                 }
             }
         }
+
+        /// <summary>
+        /// Get user input for path to store app data
+        /// </summary>
+        /// <returns> True if user input is valid </returns>
+        private bool GetPathFromUserDialog()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Enter path to directory to store app data");
+                string? userInput = Console.ReadLine();
+
+                if (Directory.Exists(userInput))
+                {
+                    this.DataDirectory = userInput;
+                    return true;
+                }
+                else
+                {
+                    Console.Clear();
+                    int idx = TerminalSelector.Select(
+                        new string[] {
+                            "OK",
+                            "Cancel",
+                        },
+                        "Given path is invalid"
+                    );
+
+                    // If user selects "Cancel"
+                    if (idx == 1) return false;
+                }
+            }
+        }
+
     }
 }
