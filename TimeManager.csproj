@@ -9,6 +9,8 @@
     <!-- Duplicate errors with AssemblyInfo and TargetFramework -->
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>    
+    <!-- Treat warnings as errors -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
 </Project>
