@@ -117,17 +117,27 @@ namespace timeManager
 
         void UpdateConsole(ClockState clockState, Stopwatch stopwatch, bool animatedMode = false)
         {
-            string ui;
-
             Console.Clear();
-            ui = $"Total study time on course {courseName} is {totalTime}\n" +
-                  "q to exit, p to pause stopwatch, any key to resume\n\n\n\n" +
-                  $"Current session: {stopwatch.Elapsed.ToString().Substring(0, 8)}\n";
+            Console.WriteLine(
+                $"Total study time on course {courseName} is {totalTime}\n" +
+                 "q to exit, p to pause stopwatch, any key to resume\n\n\n\n" +
+                 $"Current session: {stopwatch.Elapsed.ToString().Substring(0, 8)}\n"
+            );
 
-            if (clockState == ClockState.Stopped) ui += "Clock is stopped!\n";
-            if (clockState == ClockState.Running) ui += "Clock is running!\n";
+            if (clockState == ClockState.Stopped)
+            {
+                Console.Write("Clock is ");
+                ConsoleWriter.Write("paused", ConsoleColor.White, ConsoleColor.Red);
+                Console.WriteLine("!");
+            }
+            else if (clockState == ClockState.Running)
+            {
+                Console.Write("Clock is ");
+                ConsoleWriter.Write("running", ConsoleColor.Green);
+                Console.WriteLine("!");
+            }
 
-            Console.WriteLine(ui);
+            Console.WriteLine();
 
             if (animatedMode)
                 slider.Print();
