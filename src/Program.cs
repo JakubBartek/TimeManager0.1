@@ -41,7 +41,7 @@
                         break;
 
                     case "calendar":
-                        errorMsg = "Calendar app is not finished yet";
+                        Calendar.Run();
                         break;
 
                     case "exit":
