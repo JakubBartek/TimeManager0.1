@@ -21,6 +21,9 @@ namespace timeManager
         // Number of rows in the calendar
         private int numOfRows;
 
+        // The bottom message to be displayed
+        private static string bottomMessage = "";
+
         public Calendar()
         {
             selectedDay = DateTime.Now.Day;
@@ -46,8 +49,8 @@ namespace timeManager
         private int GetNumberOfRows(int startDayIndex, int daysInSelectedMonth)
         {
             return 
-                (startDayIndex == 5 || startDayIndex == 6) 
-                && daysInSelectedMonth >= 30 ? 6 : 5;
+                (startDayIndex == 5 && daysInSelectedMonth == 31) 
+                || (startDayIndex == 6 && daysInSelectedMonth >= 30) ? 6 : 5;
         }
 
         private int GetStartDayIndex(int year, int month)
@@ -88,6 +91,10 @@ namespace timeManager
             // Get the name of the month
             string monthName = new DateTime(selectedYear, selectedMonth, 1).ToString("MMMM");
 
+            var calendarMonthParser = new CalendarMonthParser(selectedYear, selectedMonth);
+            Dictionary<int, ulong> dayAndTotalTimeSpent =
+                calendarMonthParser.GetDayAndTotalTimeSpent();
+
             Console.WriteLine(" " + monthName + " " + selectedYear.ToString());
 
             Console.WriteLine(" ┌───┬───┬───┬───┬───┬───┬───┐");
@@ -114,6 +121,23 @@ namespace timeManager
                     {
                         Console.Write("│");
 
+                        // Highlight day if the user spent time on it
+                        if (dayAndTotalTimeSpent.ContainsKey(day)
+                            && dayAndTotalTimeSpent[day] > 0)
+                        {
+                            // TODO: Change the threshold (it's in seconds)
+                            if (dayAndTotalTimeSpent[day] <= 2)
+                            {
+                                Console.BackgroundColor = ConsoleColor.Green;
+                                Console.ForegroundColor = ConsoleColor.Black;
+                            }
+                            else
+                            {
+                                Console.BackgroundColor = ConsoleColor.DarkGreen;
+                                Console.ForegroundColor = ConsoleColor.White;
+                            }
+                        }
+
                         if (day == selectedDay)
                         {
                             Console.BackgroundColor = ConsoleColor.White;
@@ -137,6 +161,7 @@ namespace timeManager
         private void PrintKeyPressInfo()
         {
             Console.WriteLine("Arrow keys to navigate the calendar");
+            Console.WriteLine("Enter to look at the selected day");
             Console.WriteLine("A to go to the previous month");
             Console.WriteLine("D to go to the next month");
             Console.WriteLine("F to search for a specific date");
@@ -194,7 +219,7 @@ namespace timeManager
                     break;
 
                 case ConsoleKey.Enter:
-                    Console.WriteLine("TODO");
+                    bottomMessage = "Enter TODO";
                     break;
             }
         }
@@ -256,8 +281,11 @@ namespace timeManager
             {
                 Console.Clear();
                 calendar.Print();
+                Console.WriteLine(bottomMessage);
+
                 keyInfo = Console.ReadKey(true);
                 calendar.HandleKeyPress(keyInfo);
+
             } while (keyInfo.Key != ConsoleKey.Q);
         }
     }
