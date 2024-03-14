@@ -29,7 +29,7 @@ namespace timeManager
         /// </summary>
         /// <param name="courseName"></param>
         /// <param name="day"></param>
-        private void AddCourseToDay(string courseName, int day)
+        private static void AddCourseToDay(string courseName, int day)
         {
             string fileName = Path.Join(
                 CalendarDirectory, $"{DateTime.Now.ToString("yyyy-MM")}.txt");
@@ -46,17 +46,19 @@ namespace timeManager
                 Array.Resize(ref lines, day);
             }
 
+            if (CourseInLine(courseName, lines[day - 1]))
+                return;
+
             // If non-empty, add a comma
             if (lines[day - 1] != "")
                 lines[day - 1] += ",";
 
-            if (!CourseInLine(courseName, lines[day - 1]))
-                lines[day - 1] += courseName;
+            lines[day - 1] += courseName;
 
             File.WriteAllLines(fileName, lines);
         }
 
-        private bool CourseInLine(string courseName, string line)
+        private static bool CourseInLine(string courseName, string line)
         {
             return line.Contains(courseName);
         }
