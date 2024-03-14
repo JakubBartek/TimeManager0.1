@@ -46,14 +46,28 @@ namespace timeManager
                 Console.WriteLine("Enter course code: ");
                 courseName = Console.ReadLine();
 
-                if (courseName != null && courseName.Length > 0) break;
-
-                TerminalSelector.Select(
-                    new string[] {
-                        "OK",
-                    },
-                    "Course name cannot be empty\n"
-                );
+                if (courseName == null || courseName.Length == 0)
+                {
+                    TerminalSelector.Select(
+                        new string[] {
+                            "OK",
+                        },
+                        "Course name cannot be empty\n"
+                    );
+                }
+                else if (courseName.Contains(","))
+                {
+                    TerminalSelector.Select(
+                        new string[] {
+                            "OK",
+                        },
+                        "Course name cannot contain a comma\n"
+                    );
+                }
+                else
+                {
+                    break;
+                }
             }
 
             this.courseName = courseName;
@@ -81,12 +95,12 @@ namespace timeManager
                 DirectoryHandler.MakeNewDirectory(courseFolder);
             }
 
-            if (!Directory.Exists(totalTimeSpentFile))
+            if (!File.Exists(totalTimeSpentFile))
             {
                 DirectoryHandler.MakeFileInDirectory(totalTimeSpentFile, "0");
             }
 
-            if (!Directory.Exists(courseFile))
+            if (!File.Exists(courseFile))
             {
                 DirectoryHandler.MakeFileInDirectory(courseFile, "0");
             }
@@ -190,6 +204,9 @@ namespace timeManager
                     stopwatch.Stop();
                     UpdateTotalTime();
                     DirectoryHandler.SaveTotalTime(totalTimeSpentFile, totalTime.ToString());
+
+                    CalendarSaver.SaveCourseToday(courseName);
+
                     return ClockState.End;
 
                 case "p":
