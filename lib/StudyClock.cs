@@ -41,8 +41,13 @@ namespace timeManager
                 courseName = Console.ReadLine();
 
                 if (courseName != null && courseName.Length > 0) break;
-                Console.WriteLine("Course name cannot be empty");
-                Thread.Sleep(500);
+
+                TerminalSelector.Select(
+                    new string[] {
+                        "OK",
+                    },
+                    "Course name cannot be empty\n"
+                );
             }
 
             this.courseName = courseName;
