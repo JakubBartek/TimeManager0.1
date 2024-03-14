@@ -43,6 +43,23 @@
             }
         }
 
+        public static void AddToTime(string filename, ulong seconds)
+        {
+            string? totalTime = ReadLineFromFile(filename);
+            if (totalTime == null)
+            {
+                throw new Exception("Error reading from file");
+            }
+            else if (totalTime == "")
+            {
+                totalTime = "0";
+            }
+
+            ulong totalTimeSeconds = Convert.ToUInt64(totalTime);
+            totalTimeSeconds += seconds;
+            SaveTotalTime(filename, totalTimeSeconds.ToString());
+        }
+
         public static string? ReadLineFromFile(string fileName)
         {
             try
