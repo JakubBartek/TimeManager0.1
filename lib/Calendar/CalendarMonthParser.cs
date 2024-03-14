@@ -74,16 +74,6 @@ namespace timeManager
             for (int day = 1; day <= lines.Length; day++)
             {
                 string[] courses = GetCourses(lines, day);
-
-                if (courses.Length >= 1 && courses[0] != "")
-                {
-                    Console.WriteLine($"Day {day}:");
-                    foreach (string course in courses)
-                    {
-                        Console.WriteLine(course);
-                    }
-                }
-
                 ulong totalTimeSpent = 0;
 
                 foreach (string course in courses)
