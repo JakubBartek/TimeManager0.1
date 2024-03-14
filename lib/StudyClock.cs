@@ -30,6 +30,7 @@ namespace timeManager
         ╚═════╝░░░░╚═╝░░░╚═╝░░╚═╝░░░╚═╝░░░  ╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝╚═════╝░";
 
         TerminalAnimationSlider slider;
+        // TODO: Add settings to the constructor, so that the user can select the course folder
         public StudyClock(string courseFolder = "default")
         {
             stopwatch = new();
@@ -58,7 +59,8 @@ namespace timeManager
             this.courseName = courseName;
             if (courseFolder.Equals("default"))
                 // If no directory is selected, use the current one
-                this.courseFolder = "TimeManagerPersonalData/" + courseName; 
+                // TODO: Change with settings
+                this.courseFolder = "data/" + courseName; 
 
             // The name of the course file is the current date
             courseFile = this.courseFolder + $"/{DateTime.Now.ToString("yyyy-MM-dd")}.txt";
@@ -77,6 +79,10 @@ namespace timeManager
                 Console.WriteLine("Making new course directory...");
 
                 DirectoryHandler.MakeNewDirectory(courseFolder);
+            }
+
+            if (!Directory.Exists(totalTimeSpentFile))
+            {
                 DirectoryHandler.MakeFileInDirectory(totalTimeSpentFile, "0");
             }
 
