@@ -71,14 +71,20 @@ namespace timeManager
             return (selectedDay + startDayIndex - 1) % 7;
         }
 
+        private void PrintDebug()
+        {
+            Console.WriteLine("Selected day: " + selectedDay);
+            Console.WriteLine("Selected month: " + selectedMonth);
+            Console.WriteLine("Selected year: " + selectedYear);
+            Console.WriteLine("Days in selected month: " + daysInSelectedMonth);
+            Console.WriteLine("Start day index: " + startDayIndex);
+            Console.WriteLine("Selected row index: " + selectedRowIndex);
+            Console.WriteLine("Selected column index: " + selectedColumnIndex);
+            Console.WriteLine("Number of rows: " + numOfRows);
+        }
+
         public void Print()
         {
-            Console.WriteLine(startDayIndex);
-            Console.WriteLine(selectedDay);
-            Console.WriteLine(selectedRowIndex);
-            Console.WriteLine(selectedColumnIndex);
-            Console.WriteLine(daysInSelectedMonth);
-
             // Get the name of the month
             string monthName = new DateTime(selectedYear, selectedMonth, 1).ToString("MMMM");
 
@@ -133,6 +139,7 @@ namespace timeManager
             Console.WriteLine("Arrow keys to navigate the calendar");
             Console.WriteLine("A to go to the previous month");
             Console.WriteLine("D to go to the next month");
+            Console.WriteLine("F to search for a specific date");
             Console.WriteLine("Q to exit\n");
         }
 
@@ -175,7 +182,8 @@ namespace timeManager
                     MoveMonth(+1);
                     UpdateSelectionVariables();
                     break;
-                
+
+                // Search for a specific date
                 case ConsoleKey.F:
                     int day, month, year;
                     GetDateInputFromUser(out day, out month, out year);
