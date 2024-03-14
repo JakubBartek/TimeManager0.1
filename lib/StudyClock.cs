@@ -13,10 +13,13 @@ namespace timeManager
         readonly string courseName = string.Empty;
         readonly string courseFolder = string.Empty;
         readonly string courseFile = string.Empty;
-        string totalTime = string.Empty;
-        // TODO: Save totalTime as ulong in seconds instead of string
-        // // Nobody have lived for 584942417355 years so far, so ulong is okay
-        // ulong totalSeconds = 0;
+        readonly string totalTimeSpentFile = string.Empty;
+        // Nobody have lived for 584942417355 years so far, so ulong is okay
+        private ulong totalTime;
+        // The time of the current session
+        private ulong sessionTime = 0;
+
+        Stopwatch stopwatch;
 
         readonly string stayHardLogo = @"
         ░██████╗████████╗░█████╗░██╗░░░██╗  ██╗░░██╗░█████╗░██████╗░██████╗░
@@ -29,6 +32,8 @@ namespace timeManager
         TerminalAnimationSlider slider;
         public StudyClock(string courseFolder = "default")
         {
+            stopwatch = new();
+
             slider = new(stayHardLogo, 49);
 
             // TODO
@@ -51,25 +56,38 @@ namespace timeManager
             }
 
             this.courseName = courseName;
-            if (courseFolder.Equals("default")) this.courseFolder = "TimeManagerPersonalData/" + courseName; // if no directory is selected use the current one
+            if (courseFolder.Equals("default"))
+                // If no directory is selected, use the current one
+                this.courseFolder = "TimeManagerPersonalData/" + courseName; 
 
-            courseFile = this.courseFolder + $"/{courseName}.txt";
+            // The name of the course file is the current date
+            courseFile = this.courseFolder + $"/{DateTime.Now.ToString("yyyy-MM-dd")}.txt";
+            totalTimeSpentFile = this.courseFolder + "/totalTimeSpent.txt";
         }
 
         public void Start(bool animatedMode = false)
         {
             if (!Directory.Exists(courseFolder))
             {
-                if (GetAnswer("Course not found. Do you want to start a timer on a new course? (y/n)") == "n")
+                if (GetAnswer("Course not found. " + 
+                    "Do you want to start a timer on a new course? (y/n)") == "n")
                 {
                     return;
                 }
                 Console.WriteLine("Making new course directory...");
 
                 DirectoryHandler.MakeNewDirectory(courseFolder);
-                DirectoryHandler.MakeFileInDirectory(courseFile, "00:00:00:00");
+                DirectoryHandler.MakeFileInDirectory(totalTimeSpentFile, "0");
             }
-            GetTotalTime();
+
+            if (!Directory.Exists(courseFile))
+            {
+                DirectoryHandler.MakeFileInDirectory(courseFile, "0");
+            }
+
+            ParseTotalTime();
+
+            stopwatch.Start();
 
             if (animatedMode)
                 RunClockAnimated();
@@ -79,15 +97,13 @@ namespace timeManager
 
         void RunClock()
         {
-            Stopwatch stopwatch = new();
-            stopwatch.Start();
             ClockState clockState = ClockState.Running;
 
             while (true)
             {
-                UpdateConsole(clockState, stopwatch);
+                UpdateConsole(clockState);
 
-                clockState = HandleInput(Console.ReadKey(true).Key.ToString(), stopwatch);
+                clockState = HandleInput(Console.ReadKey(true));
 
                 if (clockState == ClockState.End) return;
             }
@@ -95,8 +111,6 @@ namespace timeManager
 
         void RunClockAnimated()
         {
-            Stopwatch stopwatch = new();
-            stopwatch.Start();
             ClockState clockState = ClockState.Running;
 
             Stopwatch consoleUpdateTimer = new();
@@ -107,24 +121,24 @@ namespace timeManager
                 if (consoleUpdateTimer.ElapsedMilliseconds > 50)
                 {
                     consoleUpdateTimer.Restart();
-                    UpdateConsole(clockState, stopwatch, animatedMode: true);
+                    UpdateConsole(clockState, animatedMode: true);
                 }
 
                 if (Console.KeyAvailable)
                 {
                     // True to not display the pressed key
-                    clockState = HandleInput(Console.ReadKey(true).Key.ToString(), stopwatch);
+                    clockState = HandleInput(Console.ReadKey(true));
                 }
 
                 if (clockState == ClockState.End) return;
             }
         }
 
-        void UpdateConsole(ClockState clockState, Stopwatch stopwatch, bool animatedMode = false)
+        void UpdateConsole(ClockState clockState, bool animatedMode = false)
         {
             Console.Clear();
             Console.WriteLine(
-                $"Total study time on course {courseName} is {totalTime}\n" +
+                $"Total study time on course {courseName} is {GetTimeAsString()}\n\n" +
                  "q to exit, p to pause stopwatch, any key to resume\n\n\n\n" +
                  $"Current session: {stopwatch.Elapsed.ToString().Substring(0, 8)}\n"
             );
@@ -150,14 +164,26 @@ namespace timeManager
                 Console.WriteLine(stayHardLogo);
         }
 
-        ClockState HandleInput(string userInput, Stopwatch stopwatch)
+        private void UpdateTotalTime()
         {
-            switch (userInput.ToLower())
+            totalTime += Convert.ToUInt64(stopwatch.ElapsedMilliseconds / 1000);
+        }
+
+        private void UpdateSessionTime()
+        {
+            sessionTime = Convert.ToUInt64(stopwatch.ElapsedMilliseconds / 1000);
+        }
+
+        ClockState HandleInput(ConsoleKeyInfo userInput)
+        {
+            UpdateSessionTime();
+
+            switch (userInput.Key.ToString().ToLower())
             {
                 case "q":
                     stopwatch.Stop();
-                    totalTime = AddSecondsToTime(stopwatch.ElapsedMilliseconds / 1000);
-                    DirectoryHandler.SaveTotalTime(courseFile, totalTime);
+                    UpdateTotalTime();
+                    DirectoryHandler.SaveTotalTime(totalTimeSpentFile, totalTime.ToString());
                     return ClockState.End;
 
                 case "p":
@@ -170,29 +196,31 @@ namespace timeManager
             }
         }
 
-        string AddSecondsToTime(long secondsToAdd)
+        private string GetTimeAsString()
         {
-            // Parse the existing time string to a TimeSpan
-            if (TimeSpan.TryParse(totalTime, out TimeSpan currentTime))
-            {
-                // Add seconds to the existing time
-                TimeSpan updatedTime = currentTime.Add(TimeSpan.FromSeconds(secondsToAdd));
-
-                // Format the updated time as dd:hh:mm:ss
-                string formattedTime = $"{updatedTime.Days:D2}:{updatedTime.Hours:D2}:{updatedTime.Minutes:D2}:{updatedTime.Seconds:D2}";
-
-                return formattedTime;
-            }
-            else
-            {
-                throw new ArgumentException("Invalid time format. Expected format: dd:hh:mm:ss");
-            }
+            // Transfer totalTime (in seconds) to a TimeSpan
+            TimeSpan timeSpan = TimeSpan.FromSeconds(totalTime + sessionTime);
+            return $"Days: {timeSpan.Days}, Hours: {timeSpan.Hours}, " + 
+                    $"Minutes: {timeSpan.Minutes}, Seconds: {timeSpan.Seconds}";
+            // return $"{timeSpan.Days:D2}:{timeSpan.Hours:D2}:{timeSpan.Minutes:D2}:{timeSpan.Seconds:D2}";
         }
 
-        void GetTotalTime()
+        private string SecondsToTimeString(ulong seconds)
         {
-            string? totalTime = DirectoryHandler.ReadLineFromFile(courseFile);
-            this.totalTime = totalTime ?? "";
+            TimeSpan timeSpan = TimeSpan.FromSeconds(seconds);
+            return $"{timeSpan.Days:D2}:{timeSpan.Hours:D2}:{timeSpan.Minutes:D2}:{timeSpan.Seconds:D2}";
+        }
+
+        void ParseTotalTime()
+        {
+            string? totalTimeStr = DirectoryHandler.ReadLineFromFile(totalTimeSpentFile);
+
+            if (totalTimeStr == null)
+            {
+                throw new Exception("Error reading from file");
+            }
+
+            totalTime = Convert.ToUInt64(totalTimeStr);
         }
 
         static string GetAnswer(string message)
