@@ -204,6 +204,7 @@ namespace timeManager
                     stopwatch.Stop();
                     UpdateTotalTime();
                     DirectoryHandler.SaveTotalTime(totalTimeSpentFile, totalTime.ToString());
+                    DirectoryHandler.AddToTime(courseFile, sessionTime);
 
                     CalendarSaver.SaveCourseToday(courseName);
 
