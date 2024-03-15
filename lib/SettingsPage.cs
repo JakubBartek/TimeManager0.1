@@ -3,10 +3,13 @@
     class SettingsPage
     {
         public string DataDirectory { get; set; }
+        private string dataFolderName = "data";
+        private string DataParentDirectory = Directory.GetCurrentDirectory();
 
         public SettingsPage()
         {
-            this.DataDirectory = Directory.GetCurrentDirectory();
+            this.DataDirectory = Path.Join(
+                DataParentDirectory, dataFolderName);
         }
 
         /// <summary>

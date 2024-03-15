@@ -20,6 +20,8 @@
 
                 for (int i = 0; i < options.Length; i++)
                 {
+                    Console.Write("  ");
+
                     if (i == selected)
                     {
                         Console.BackgroundColor = ConsoleColor.Gray;

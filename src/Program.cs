@@ -15,7 +15,9 @@
                 "Exit",
             };
 
-            string errorMsg = "";
+            string bottomMessage = "";
+
+            string dataDirectory = settingsPage.DataDirectory;
 
             while (true)
             {
@@ -25,7 +27,7 @@
                     options[TerminalSelector.Select(
                         options,
                         "Welcome to TimeManager0.1\n",
-                        "\n" + errorMsg
+                        "\n" + bottomMessage
                     )];
 
                 switch (chosenOption.ToLower())
@@ -38,6 +40,7 @@
 
                         Console.WriteLine("Exiting StudyClock!");
                         Console.Clear();
+                        bottomMessage = "Course saved to Calendar!";
                         break;
 
                     case "calendar":
