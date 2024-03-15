@@ -211,7 +211,10 @@ namespace timeManager
                 // Search for a specific date
                 case ConsoleKey.F:
                     int day, month, year;
-                    GetDateInputFromUser(out day, out month, out year);
+                    if (!GetDateInputFromUser(out day, out month, out year))
+                    {
+                        break;
+                    }    
                     selectedDay = day;
                     selectedMonth = month;
                     selectedYear = year;
@@ -243,29 +246,31 @@ namespace timeManager
         {
             Console.WriteLine("Enter the day:");
             string? dayStr = Console.ReadLine();
-            Console.WriteLine("Enter the month:");
-            string? monthStr = Console.ReadLine();
-            Console.WriteLine("Enter the year:");
-            string? yearStr = Console.ReadLine();
 
-            if (!int.TryParse(dayStr, out day))
+            if (!int.TryParse(dayStr, out day) || day < 1 || day > 31)
             {
-                Console.WriteLine("Invalid day");
+                bottomMessage = "Invalid day";
                 month = 0;
                 year = 0;
                 return false;
             }
 
-            if (!int.TryParse(monthStr, out month))
+            Console.WriteLine("Enter the month:");
+            string? monthStr = Console.ReadLine();
+
+            if (!int.TryParse(monthStr, out month) || month < 1 || month > 12)
             {
-                Console.WriteLine("Invalid month");
+                bottomMessage = "Invalid month";
                 year = 0;
                 return false;
             }
 
-            if (!int.TryParse(yearStr, out year))
+            Console.WriteLine("Enter the year:");
+            string? yearStr = Console.ReadLine();
+
+            if (!int.TryParse(yearStr, out year) || year < 1)
             {
-                Console.WriteLine("Invalid year");
+                bottomMessage = "Invalid year";
                 return false;
             }
 

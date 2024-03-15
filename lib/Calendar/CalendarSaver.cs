@@ -44,6 +44,14 @@ namespace timeManager
             if (lines.Length < day)
             {
                 Array.Resize(ref lines, day);
+                // Fill the new lines with empty strings
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    if (lines[i] == null)
+                    {
+                        lines[i] = "";
+                    }
+                }
             }
 
             if (CourseInLine(courseName, lines[day - 1]))

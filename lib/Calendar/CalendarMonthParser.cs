@@ -30,12 +30,17 @@ namespace timeManager
             string fileName = Path.Join(CalendarDirectory,
                                         $"{CurrentYear}-{CurrentMonth:00}.txt");
 
+            string[] lines;
             if (!File.Exists(fileName))
             {
-                using (File.Create(fileName)) { }
+                // Do not create the file if it does not exist
+                lines = new string[0];
+            }
+            else
+            {
+                lines = File.ReadAllLines(fileName);
             }
 
-            string[] lines = File.ReadAllLines(fileName);
             // Resize the array to the number of days in the month
             ResizeLines(ref lines, DateTime.DaysInMonth(CurrentYear, CurrentMonth));
 
